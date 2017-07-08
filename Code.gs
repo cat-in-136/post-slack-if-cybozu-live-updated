@@ -98,9 +98,15 @@ function createAttachmentsFromXML(xml) {
   var attachments = [];
   var document = XmlService.parse(xml);
   var atom = XmlService.getNamespace("http://www.w3.org/2005/Atom");
-
-  var current = new Date();
-  var dividion = new Date(current.getTime() - 5*60*1000);
+  
+  var dividion;
+  var updateTime = scriptProperties.getProperty("__UPDATE_TIME");
+  if (!!updateTime && !isNaN(parseInt(updateTime, 10))) {
+    dividion = new Date(parseInt(updateTime, 10) * 1000);
+  } else {
+    // set to 5 minutes ago
+    dividion = new Date((new Date()).getTime() - 5*60*1000);
+  }
 
   var entries = document.getRootElement().getChildren("entry", atom);
   for (var i = 0; i < entries.length; i++) {
@@ -163,6 +169,9 @@ function run() {
       Logger.log("Could not access to the cybozu endpoint. Check your configuration.");
       throw new Error("Could not access to the cybozu endpoint. Check your configuration.");
     }
+    
+    // Store (successfully) update time.
+    scriptProperties.setProperty("__UPDATE_TIME", parseInt((new Date()).getTime() / 1000).toString(10));
   } catch (ex) {
     var attachments = [{
       fallback: Utilities.formatString("%s", ex),
