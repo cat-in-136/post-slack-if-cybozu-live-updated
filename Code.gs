@@ -3,6 +3,7 @@
 var scriptProperties = PropertiesService.getScriptProperties();
 var SLACK_WEBHOOK_URL = scriptProperties.getProperty("SLACK_WEBHOOK_URL");
 var SLACK_NOTIFY_CHANNEL = scriptProperties.getProperty("SLACK_NOTIFY_CHANNEL"); // OPTIONAL
+var SLACK_ERROR_NOTIFY_CHANNEL = scriptProperties.getProperty("SLACK_ERROR_NOTIFY_CHANNEL"); // OPTIONAL
 var CYBOZULIVE_CONSUMER_KEY = scriptProperties.getProperty("CYBOZULIVE_CONSUMER_KEY");
 var CYBOZULIVE_CONSUMER_SECRET = scriptProperties.getProperty("CYBOZULIVE_CONSUMER_SECRET");
 var CYBOZULIVE_ACCESS_TOKEN = scriptProperties.getProperty("CYBOZULIVE_ACCESS_TOKEN");
@@ -158,7 +159,7 @@ function run() {
         Logger.log("post to slack : %s posts", attachments.length);
         
         postMessageToSlack({
-          chanenl: SLACK_NOTIFY_CHANNEL || "#general",
+          channel: SLACK_NOTIFY_CHANNEL || "#general",
           as_user: false,
           username: "cybozu live notification",
           icon_url: "https://cybozulive.com/static/62fe2c63f0/images/og_image.png",
@@ -189,7 +190,7 @@ function run() {
     }
     
     postMessageToSlack({
-      chanenl: SLACK_NOTIFY_CHANNEL || "#general",
+      channel: SLACK_ERROR_NOTIFY_CHANNEL || SLACK_NOTIFY_CHANNEL || "#general",
       text: ":mask: Executatin Error",
       attachments: attachments
     });
