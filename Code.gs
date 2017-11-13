@@ -174,17 +174,19 @@ function run() {
     // Store (successfully) update time.
     scriptProperties.setProperty("__UPDATE_TIME", parseInt((new Date()).getTime() / 1000).toString(10));
   } catch (ex) {
-    var attachments = [{
-      fallback: Utilities.formatString("%s", ex),
-      color: "#ff0000",
-      title: ex.name,
-      text: ex
-    }];
-    if (ex.stack) {
+    var attachments = [];
+    if (!ex.stack) {
+      attachments.push({
+        fallback: Utilities.formatString("%s", ex),
+        color: "#ff0000",
+        title: ex.name,
+        text: ex
+      });
+    } else {
       attachments.push({
         fallback: Utilities.formatString("%s", ex.stack),
         color: "#ff0000",
-        title: "Stack Trace",
+        title: ex.name + " " + ex,
         text: ex.stack
       });
     }
