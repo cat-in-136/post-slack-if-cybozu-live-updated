@@ -191,7 +191,7 @@ function run() {
     
     postMessageToSlack({
       channel: SLACK_ERROR_NOTIFY_CHANNEL || SLACK_NOTIFY_CHANNEL || "#general",
-      text: ":mask: Executatin Error",
+      text: ":mask: Execution Error",
       attachments: attachments
     });
   }
